@@ -14,7 +14,7 @@ from backend.pipeline import run_pipeline
 
 # ── Page config ────────────────────────────────────────────────────────────────
 st.set_page_config(
-    page_title="Eddoboozi — Language Bridge",
+    page_title="Eddoboozi  Local Language Bridge",
     page_icon="🎙️",
     layout="wide",
     initial_sidebar_state="collapsed",
@@ -24,29 +24,25 @@ st.set_page_config(
 st.markdown(
     """
 <style>
-@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=DM+Serif+Display:ital@0;1&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;0,9..40,600;1,9..40,300&display=swap');
 
 *, *::before, *::after { box-sizing: border-box; }
 
 :root {
-  --bg:          #eef1f8;
-  --bg2:         #e8ecf5;
-  --surface:     #f4f7fc;
-  --surface-2:   #ffffff;
-  --border:      #d8dff0;
-  --mint:        #3ecfa3;
-  --mint-soft:   rgba(62,207,163,.13);
-  --mint-glow:   rgba(62,207,163,.22);
-  --navy:        #1e2d4a;
-  --navy-mid:    #3a4f72;
-  --text:        #1e2d4a;
-  --muted:       #7a8eab;
-  --success:     #3ecfa3;
-  --error:       #e05c6a;
-  --shadow-out:  6px 6px 14px #c8cfe0, -6px -6px 14px #ffffff;
-  --shadow-in:   inset 3px 3px 8px #c8cfe0, inset -3px -3px 8px #ffffff;
-  --r:           14px;
-  --rlg:         20px;
+  --bg:         #0d1117;
+  --surface:    #161b22;
+  --surface-2:  #1c2330;
+  --border:     #2a3344;
+  --amber:      #f0a500;
+  --amber-glow: rgba(240,165,0,.12);
+  --cream:      #f5ede0;
+  --cream-dim:  #c9b89e;
+  --text:       #e8ddd0;
+  --muted:      #7e8d9e;
+  --success:    #3fb950;
+  --error:      #f85149;
+  --r:          12px;
+  --rlg:        18px;
 }
 
 /* ── Global background & font ── */
@@ -54,7 +50,7 @@ html, body,
 [data-testid="stAppViewContainer"],
 [data-testid="stApp"] {
   background: var(--bg) !important;
-  font-family: 'Inter', sans-serif !important;
+  font-family: 'DM Sans', sans-serif !important;
   color: var(--text) !important;
 }
 
@@ -66,7 +62,7 @@ html, body,
 [data-testid="stStatusWidget"]    { display: none !important; }
 footer, #MainMenu                 { display: none !important; }
 
-/* ── Remove all default padding ── */
+/* ── Remove all default padding from the main container ── */
 .main .block-container,
 [data-testid="stMainBlockContainer"],
 [data-testid="stVerticalBlock"] > div:first-child {
@@ -74,43 +70,42 @@ footer, #MainMenu                 { display: none !important; }
   max-width: 100% !important;
 }
 
-/* ── Soft ambient glow ── */
+/* ── Ambient background glow ── */
 [data-testid="stAppViewContainer"]::before {
   content: '';
   position: fixed; inset: 0; pointer-events: none; z-index: 0;
   background:
-    radial-gradient(ellipse 60% 40% at 80% 5%,  rgba(62,207,163,.08) 0%, transparent 65%),
-    radial-gradient(ellipse 50% 50% at 10% 90%, rgba(62,207,163,.05) 0%, transparent 65%);
+    radial-gradient(ellipse 55% 35% at 85% 8%,  rgba(240,165,0,.07) 0%, transparent 65%),
+    radial-gradient(ellipse 45% 45% at 15% 85%, rgba(240,165,0,.04) 0%, transparent 65%);
 }
 
 /* ═══════════════════════════════════════════
    HERO HEADER
 ═══════════════════════════════════════════ */
 .Eddoboozi-hero {
-  padding: 1.6rem 2.5rem 1.4rem;
+  padding: 1.75rem 2.5rem 1.5rem;
   border-bottom: 1px solid var(--border);
   display: flex;
   align-items: center;
   gap: 1.25rem;
-  background: var(--surface-2);
-  box-shadow: 0 2px 12px rgba(30,45,74,.06);
+  background: var(--bg);
 }
 .logo-mark {
-  width: 50px; height: 50px; flex-shrink: 0;
-  background: linear-gradient(135deg, #3ecfa3 0%, #2ab88e 100%);
-  border-radius: 14px;
+  width: 48px; height: 48px; flex-shrink: 0;
+  background: var(--amber);
+  border-radius: 13px;
   display: flex; align-items: center; justify-content: center;
-  box-shadow: 0 4px 16px rgba(62,207,163,.35);
+  box-shadow: 0 0 24px rgba(240,165,0,.38);
 }
 .logo-mark svg { width: 26px; height: 26px; }
 .hero-text h1 {
   font-family: 'DM Serif Display', serif;
   font-size: 1.85rem; margin: 0; line-height: 1;
-  color: var(--navy); letter-spacing: -.4px;
+  color: var(--cream); letter-spacing: -.4px;
 }
 .hero-text p {
   margin: .3rem 0 0;
-  font-size: .82rem; font-weight: 400;
+  font-size: .82rem; font-weight: 300;
   color: var(--muted); letter-spacing: .01em;
 }
 
@@ -119,7 +114,7 @@ footer, #MainMenu                 { display: none !important; }
 ═══════════════════════════════════════════ */
 .pip-strip {
   display: flex; align-items: center;
-  padding: .75rem 2.5rem;
+  padding: .7rem 2.5rem;
   background: var(--surface);
   border-bottom: 1px solid var(--border);
   overflow-x: auto; gap: 2px;
@@ -130,16 +125,17 @@ footer, #MainMenu                 { display: none !important; }
   display: flex; align-items: center; gap: .45rem;
   font-size: .72rem; font-weight: 500; letter-spacing: .02em;
   color: var(--muted); white-space: nowrap;
-  padding: .3rem .8rem; border-radius: 999px;
+  padding: .28rem .7rem; border-radius: 999px;
   transition: color .2s, background .2s;
 }
-.ps.active { color: var(--mint); background: var(--mint-soft); }
+.ps.active { color: var(--amber); background: var(--amber-glow); }
 .ps.done   { color: var(--success); }
 .ps-dot { width: 6px; height: 6px; border-radius: 50%; background: currentColor; flex-shrink: 0; }
 .ps-arr { color: var(--border); font-size: .8rem; padding: 0 2px; user-select: none; }
 
 /* ═══════════════════════════════════════════
    COLUMN PANEL STYLING
+   Target Streamlit's actual column containers
 ═══════════════════════════════════════════ */
 
 /* Left column — input panel */
@@ -148,7 +144,6 @@ footer, #MainMenu                 { display: none !important; }
   border-right: 1px solid var(--border) !important;
   padding: 1.75rem 1.5rem 2rem !important;
   min-height: calc(100vh - 115px) !important;
-  box-shadow: 2px 0 12px rgba(30,45,74,.04) !important;
 }
 
 /* Right column — results panel */
@@ -158,7 +153,7 @@ footer, #MainMenu                 { display: none !important; }
   min-height: calc(100vh - 115px) !important;
 }
 
-/* Remove gap between columns */
+/* Remove gap/padding between columns */
 [data-testid="stHorizontalBlock"] {
   gap: 0 !important;
   align-items: stretch !important;
@@ -168,9 +163,9 @@ footer, #MainMenu                 { display: none !important; }
    SECTION LABELS
 ═══════════════════════════════════════════ */
 .sec-label {
-  font-size: .68rem; font-weight: 700;
-  letter-spacing: .1em; text-transform: uppercase;
-  color: var(--mint); margin-bottom: .75rem;
+  font-size: .68rem; font-weight: 600;
+  letter-spacing: .09em; text-transform: uppercase;
+  color: var(--amber); margin-bottom: .75rem;
   display: flex; align-items: center; gap: .4rem;
 }
 .sec-label svg { width: 12px; height: 12px; }
@@ -188,23 +183,23 @@ footer, #MainMenu                 { display: none !important; }
 ═══════════════════════════════════════════ */
 
 /* Radio buttons */
-[data-testid="stRadio"] > div { gap: .5rem !important; }
+[data-testid="stRadio"] > div {
+  gap: .5rem !important;
+}
 [data-testid="stRadio"] label {
   background: var(--surface-2) !important;
   border: 1.5px solid var(--border) !important;
-  border-radius: 10px !important;
-  padding: .5rem 1.1rem !important;
+  border-radius: 9px !important;
+  padding: .5rem 1rem !important;
   color: var(--muted) !important;
   font-size: .85rem !important;
-  box-shadow: var(--shadow-out) !important;
-  transition: all .18s !important;
+  transition: all .15s !important;
   cursor: pointer !important;
 }
 [data-testid="stRadio"] label:has(input:checked) {
-  border-color: var(--mint) !important;
-  background: var(--mint-soft) !important;
-  color: var(--mint) !important;
-  box-shadow: var(--shadow-in) !important;
+  border-color: var(--amber) !important;
+  background: var(--amber-glow) !important;
+  color: var(--amber) !important;
 }
 
 /* Textarea */
@@ -213,16 +208,15 @@ footer, #MainMenu                 { display: none !important; }
   border: 1.5px solid var(--border) !important;
   border-radius: var(--r) !important;
   color: var(--text) !important;
-  font-family: 'Inter', sans-serif !important;
+  font-family: 'DM Sans', sans-serif !important;
   font-size: .875rem !important;
-  line-height: 1.65 !important;
+  line-height: 1.6 !important;
   resize: vertical !important;
-  box-shadow: var(--shadow-in) !important;
-  transition: border-color .18s, box-shadow .18s !important;
+  transition: border-color .15s, box-shadow .15s !important;
 }
 [data-testid="stTextArea"] textarea:focus {
-  border-color: var(--mint) !important;
-  box-shadow: 0 0 0 3px var(--mint-glow) !important;
+  border-color: var(--amber) !important;
+  box-shadow: 0 0 0 3px var(--amber-glow) !important;
   outline: none !important;
 }
 [data-testid="stTextArea"] textarea::placeholder { color: var(--muted) !important; }
@@ -233,19 +227,18 @@ footer, #MainMenu                 { display: none !important; }
   border: 1.5px dashed var(--border) !important;
   border-radius: var(--r) !important;
   padding: 1rem !important;
-  transition: border-color .18s !important;
+  transition: border-color .15s !important;
 }
-[data-testid="stFileUploader"]:hover { border-color: var(--mint) !important; }
+[data-testid="stFileUploader"]:hover { border-color: var(--amber) !important; }
 [data-testid="stFileUploader"] section { background: transparent !important; }
 [data-testid="stFileUploaderDropzoneInstructions"] span { color: var(--muted) !important; font-size: .82rem !important; }
 [data-testid="stFileUploaderDropzone"] { background: transparent !important; border: none !important; }
 [data-testid="stFileUploaderDropzone"] button {
   background: var(--surface) !important;
   border: 1px solid var(--border) !important;
-  color: var(--navy-mid) !important;
-  border-radius: 9px !important;
+  color: var(--text) !important;
+  border-radius: 8px !important;
   font-size: .8rem !important;
-  box-shadow: var(--shadow-out) !important;
 }
 
 /* Selectbox */
@@ -254,50 +247,48 @@ footer, #MainMenu                 { display: none !important; }
   border: 1.5px solid var(--border) !important;
   border-radius: var(--r) !important;
   color: var(--text) !important;
-  box-shadow: var(--shadow-out) !important;
 }
 [data-testid="stSelectbox"] > div > div:focus-within {
-  border-color: var(--mint) !important;
-  box-shadow: 0 0 0 3px var(--mint-glow) !important;
+  border-color: var(--amber) !important;
+  box-shadow: 0 0 0 3px var(--amber-glow) !important;
 }
 [data-testid="stSelectbox"] svg { color: var(--muted) !important; }
-[data-baseweb="popover"] { background: var(--surface-2) !important; border: 1px solid var(--border) !important; border-radius: var(--r) !important; box-shadow: 0 8px 32px rgba(30,45,74,.12) !important; }
+[data-baseweb="popover"] { background: var(--surface-2) !important; border: 1px solid var(--border) !important; border-radius: var(--r) !important; }
 [role="listbox"] { background: var(--surface-2) !important; }
 [role="option"]  { color: var(--text) !important; font-size: .875rem !important; }
-[role="option"]:hover { background: var(--mint-soft) !important; color: var(--mint) !important; }
+[role="option"]:hover { background: var(--amber-glow) !important; color: var(--amber) !important; }
 
 /* Button */
 [data-testid="stButton"] button {
   width: 100% !important;
-  background: linear-gradient(135deg, #3ecfa3 0%, #2ab88e 100%) !important;
-  color: #ffffff !important;
+  background: var(--amber) !important;
+  color: #0d1117 !important;
   border: none !important;
   border-radius: var(--r) !important;
-  font-family: 'Inter', sans-serif !important;
-  font-weight: 600 !important;
+  font-family: 'DM Serif Display', serif !important;
   font-size: .95rem !important;
-  padding: .8rem 1.5rem !important;
-  box-shadow: 0 4px 18px rgba(62,207,163,.35) !important;
-  transition: all .18s !important;
+  padding: .75rem 1.5rem !important;
+  box-shadow: 0 4px 18px rgba(240,165,0,.3) !important;
+  transition: background .15s, box-shadow .15s, transform .1s !important;
   letter-spacing: .2px !important;
 }
 [data-testid="stButton"] button:hover {
-  background: linear-gradient(135deg, #2ab88e 0%, #22a07c 100%) !important;
-  box-shadow: 0 8px 26px rgba(62,207,163,.45) !important;
-  transform: translateY(-2px) !important;
+  background: #f7b200 !important;
+  box-shadow: 0 6px 26px rgba(240,165,0,.45) !important;
+  transform: translateY(-1px) !important;
 }
 [data-testid="stButton"] button:active { transform: translateY(0) !important; }
 [data-testid="stButton"] button:disabled {
-  background: var(--bg2) !important;
+  background: var(--surface-2) !important;
   color: var(--muted) !important;
   box-shadow: none !important;
   transform: none !important;
-  border: 1.5px solid var(--border) !important;
+  border: 1px solid var(--border) !important;
 }
 
 /* Spinner */
-[data-testid="stSpinner"] { color: var(--mint) !important; }
-[data-testid="stSpinner"] svg { stroke: var(--mint) !important; }
+[data-testid="stSpinner"] { color: var(--amber) !important; }
+[data-testid="stSpinner"] svg { stroke: var(--amber) !important; }
 
 /* General text colour fixes */
 p, span, li, label, div { color: inherit !important; }
@@ -306,7 +297,7 @@ p, span, li, label, div { color: inherit !important; }
 /* Audio player */
 audio {
   width: 100% !important;
-  border-radius: 10px !important;
+  border-radius: 8px !important;
   margin-top: .5rem !important;
 }
 
@@ -314,12 +305,11 @@ audio {
    RESULT CARDS
 ═══════════════════════════════════════════ */
 .rcard {
-  background: var(--surface-2);
+  background: var(--surface);
   border: 1px solid var(--border);
   border-radius: var(--rlg);
-  padding: 1.3rem 1.5rem;
+  padding: 1.25rem 1.5rem;
   margin-bottom: 1rem;
-  box-shadow: var(--shadow-out);
   animation: fadeUp .35s ease both;
 }
 .rcard:nth-child(1) { animation-delay: .00s; }
@@ -329,7 +319,7 @@ audio {
 .rcard:nth-child(5) { animation-delay: .24s; }
 
 @keyframes fadeUp {
-  from { opacity: 0; transform: translateY(12px); }
+  from { opacity: 0; transform: translateY(10px); }
   to   { opacity: 1; transform: translateY(0); }
 }
 
@@ -338,19 +328,19 @@ audio {
   margin-bottom: .9rem;
 }
 .rcard-icon {
-  width: 34px; height: 34px; border-radius: 10px; flex-shrink: 0;
+  width: 32px; height: 32px; border-radius: 8px; flex-shrink: 0;
   display: flex; align-items: center; justify-content: center;
 }
 .rcard-icon svg { width: 15px; height: 15px; }
-.ic-blue   { background: rgba(62,130,207,.1);  color: #2a80d0; }
-.ic-mint   { background: var(--mint-soft);      color: var(--mint); }
-.ic-green  { background: rgba(62,207,163,.12);  color: var(--success); }
-.ic-purple { background: rgba(120,100,220,.1);  color: #7864dc; }
+.ic-blue   { background: rgba(88,166,255,.12); color: #58a6ff; }
+.ic-amber  { background: var(--amber-glow);    color: var(--amber); }
+.ic-green  { background: rgba(63,185,80,.1);   color: var(--success); }
+.ic-purple { background: rgba(188,140,255,.1); color: #bc8cff; }
 
-.rcard-title { font-size: .9rem; font-weight: 600; color: var(--navy); line-height: 1.2; }
+.rcard-title { font-size: .9rem; font-weight: 600; color: var(--cream); line-height: 1.2; }
 .rcard-sub   { font-size: .72rem; color: var(--muted); margin-top: 2px; }
 .rcard-body  {
-  font-size: .875rem; line-height: 1.7; color: var(--navy-mid);
+  font-size: .875rem; line-height: 1.7; color: var(--text);
   border-top: 1px solid var(--border);
   padding-top: .85rem; margin-top: 0;
 }
@@ -367,16 +357,15 @@ audio {
   min-height: 400px;
 }
 .empty-icon {
-  width: 66px; height: 66px; border-radius: 18px;
-  background: var(--surface-2);
+  width: 60px; height: 60px; border-radius: 16px;
+  background: var(--surface);
   border: 1px solid var(--border);
-  box-shadow: var(--shadow-out);
   display: flex; align-items: center; justify-content: center;
-  margin-bottom: .35rem;
+  margin-bottom: .25rem;
 }
 .empty-st h3 {
   font-family: 'DM Serif Display', serif;
-  font-size: 1.25rem; color: var(--navy); margin: 0;
+  font-size: 1.2rem; color: var(--cream); margin: 0;
 }
 .empty-st p { font-size: .83rem; max-width: 280px; line-height: 1.65; margin: 0; color: var(--muted); }
 
@@ -384,8 +373,8 @@ audio {
    ERROR BANNER
 ═══════════════════════════════════════════ */
 .err-banner {
-  background: rgba(224,92,106,.06);
-  border: 1px solid rgba(224,92,106,.25);
+  background: rgba(248,81,73,.07);
+  border: 1px solid rgba(248,81,73,.28);
   border-radius: var(--r);
   padding: 1rem 1.25rem;
   display: flex; gap: .75rem; align-items: flex-start;
@@ -393,7 +382,7 @@ audio {
 }
 .err-banner svg { width: 16px; height: 16px; color: var(--error); flex-shrink: 0; margin-top: 2px; }
 .err-title { font-size: .875rem; font-weight: 600; color: var(--error); }
-.err-msg   { font-size: .82rem; color: rgba(224,92,106,.85); margin-top: 3px; line-height: 1.5; }
+.err-msg   { font-size: .82rem; color: rgba(248,81,73,.8); margin-top: 3px; line-height: 1.5; }
 
 /* ═══════════════════════════════════════════
    HINT TEXT
@@ -470,51 +459,21 @@ st.markdown(
 <div class="Eddoboozi-hero">
   <div class="logo-mark">
     <svg viewBox="0 0 26 26" fill="none" xmlns="http://www.w3.org/2000/svg">
-      <ellipse cx="13" cy="11" rx="7" ry="8" fill="#ffffff" opacity=".85"/>
-      <circle cx="9"  cy="10.5" r="1.5" fill="#2ab88e"/>
-      <circle cx="13" cy="8.5"  r="1.5" fill="#2ab88e"/>
-      <circle cx="17" cy="10.5" r="1.5" fill="#2ab88e"/>
-      <rect x="10" y="18" width="6" height="5" rx="1" fill="#ffffff" opacity=".7"/>
+      <ellipse cx="13" cy="11" rx="7" ry="8" fill="#0d1117" opacity=".8"/>
+      <circle cx="9"  cy="10.5" r="1.5" fill="#0d1117"/>
+      <circle cx="13" cy="8.5"  r="1.5" fill="#0d1117"/>
+      <circle cx="17" cy="10.5" r="1.5" fill="#0d1117"/>
+      <rect x="10" y="18" width="6" height="5" rx="1" fill="#0d1117" opacity=".7"/>
     </svg>
   </div>
   <div class="hero-text">
     <h1>Eddoboozi</h1>
-    <p>Your Language Bridge &mdash; Transcribe, Summarise &amp; Broadcast in Ugandan Languages</p>
+    <p>Your Language Bridge: Transcribe, Summarise &amp; Broadcast in Ugandan Languages</p>
   </div>
 </div>
 """,
     unsafe_allow_html=True,
 )
-
-
-# ═══════════════════════════════════════════════════════════════════════════════
-# PIPELINE STRIP
-# ═══════════════════════════════════════════════════════════════════════════════
-res = st.session_state.results
-proc = st.session_state.processing
-
-if proc:
-    states = ["done", "active", "active", "active", "active", ""]
-elif res:
-    states = ["done"] * 6
-else:
-    states = ["active", "", "", "", "", ""]
-
-STEPS = ["Input", "Transcribe", "Summarise", "Translate", "Synthesise", "Output"]
-html = '<div class="pip-strip">'
-for i, (label, state) in enumerate(zip(STEPS, states)):
-    dot = (
-        '<svg viewBox="0 0 10 10" fill="currentColor" width="8" height="8">'
-        '<circle cx="5" cy="5" r="4"/></svg>'
-        if state == "done"
-        else '<div class="ps-dot"></div>'
-    )
-    html += f'<div class="ps {state}">{dot} {label}</div>'
-    if i < len(STEPS) - 1:
-        html += '<span class="ps-arr">›</span>'
-html += "</div>"
-st.markdown(html, unsafe_allow_html=True)
-
 
 # ═══════════════════════════════════════════════════════════════════════════════
 # TWO-COLUMN LAYOUT
@@ -653,7 +612,7 @@ with right:
             f"""
         <div class="empty-st">
           <div class="empty-icon">
-            <svg viewBox="0 0 24 24" fill="none" stroke="#3ecfa3" stroke-width="1.5"
+            <svg viewBox="0 0 24 24" fill="none" stroke="#f0a500" stroke-width="1.5"
               stroke-linecap="round" stroke-linejoin="round" width="28" height="28">
               <path d="M3 18v-6a9 9 0 0 1 18 0v6"/>
               <path d="M21 19a2 2 0 0 1-2 2h-1a2 2 0 0 1-2-2v-3a2 2 0 0 1 2-2h3z"/>
@@ -691,7 +650,13 @@ with right:
 
         # Transcript (audio mode)
         if r.get("transcript"):
-            rcard(SVG_MIC, "ic-blue", "Transcript", "Audio converted to text via Sunbird STT", r["transcript"])
+            rcard(
+                SVG_MIC,
+                "ic-blue",
+                "Transcript",
+                "Audio converted to text via Sunbird STT",
+                r["transcript"],
+            )
 
         # Source text (text mode)
         if not r.get("transcript") and r.get("source_text"):
@@ -700,11 +665,25 @@ with right:
 
         # Summary
         if r.get("summary"):
-            rcard(SVG_STAR, "ic-mint", "Summary", "Condensed by Sunbird Summarisation · PII anonymised", r["summary"], serif=True)
+            rcard(
+                SVG_STAR,
+                "ic-amber",
+                "Summary",
+                "Condensed by Sunbird Summarisation · PII anonymised",
+                r["summary"],
+                serif=True,
+            )
 
         # Translation
         if r.get("translation"):
-            rcard(SVG_GLOBE, "ic-purple", f"Translated to {lang}", "Powered by Sunflower LLM", r["translation"], serif=True)
+            rcard(
+                SVG_GLOBE,
+                "ic-purple",
+                f"Translated to {lang}",
+                "Powered by Sunflower LLM",
+                r["translation"],
+                serif=True,
+            )
 
         # Audio player card
         if r.get("audio_url"):
