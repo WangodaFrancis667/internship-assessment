@@ -65,24 +65,33 @@ def run_pipeline(
     # ── Step 1: Input ────────────────────────────────────────────
     if audio_bytes:
         validate_audio_duration(audio_bytes)
+        
         transcript = transcribe_audio(audio_bytes, filename=audio_filename or "audio.wav")
         result["transcript"] = transcript
         result["source_text"] = transcript
+        
     elif text_input:
         result["source_text"] = text_input.strip()
+        
     else:
         raise ValueError("Provide either text or an audio file.")
 
     # ── Step 2: Summarise ────────────────────────────────────────
+    
     summary = summarise_text(result["source_text"])
     result["summary"] = summary
+    
 
     # ── Step 3: Translate ────────────────────────────────────────
+   
     translation = translate_text(summary, target_language)
     result["translation"] = translation
+   
 
     # ── Step 4: TTS ──────────────────────────────────────────────
+    
     audio_url = synthesise_speech(translation, target_language)
     result["audio_url"] = audio_url
+   
 
     return result
