@@ -4,6 +4,8 @@ Powered by Sunbird AI
 """
 
 import os
+import tempfile
+from pathlib import Path
 import streamlit as st
 from dotenv import load_dotenv
 
@@ -401,7 +403,7 @@ for k, v in [
     ("error", None),
     ("processing", False),
     ("input_mode", "Text"),
-    ("target_lang", "lug"),
+    ("target_lang", "Luganda"),
 ]:
     if k not in st.session_state:
         st.session_state[k] = v
@@ -532,22 +534,21 @@ with left:
     # Language picker
     st.markdown('<div class="sec-label">Target Language</div>', unsafe_allow_html=True)
     LANGS = {
-        "lug": "Luganda",
-        "nyn": "Runyankole",
-        "teo": "Ateso",
-        "lgg": "Lugbara",
-        "ach": "Acholi",
+        "Luganda": 248,
+        "Runyankole": 243,
+        "Ateso": 242,
+        "Lugbara": 245,
+        "Acholi": 241,
     }
-    lang_names = list(LANGS.values())
-    lang_codes = list(LANGS.keys())
+    lang_names = list(LANGS.keys())
 
     sel_name = st.selectbox(
         "lang",
         options=lang_names,
-        index=lang_codes.index(st.session_state.target_lang),
+        index=lang_names.index(st.session_state.target_lang),
         label_visibility="collapsed",
     )
-    st.session_state.target_lang = lang_codes[lang_names.index(sel_name)]
+    st.session_state.target_lang = sel_name
 
     st.markdown('<div class="sdiv"></div>', unsafe_allow_html=True)
 
@@ -566,19 +567,30 @@ with left:
 
         with st.spinner(f"Running pipeline — this may take 30–60 s on the free tier…"):
             try:
-                audio_bytes, audio_filename = None, None
+                audio_path = None
                 if audio_file:
-                    audio_bytes = audio_file.read()
-                    audio_filename = audio_file.name
+                    # Save uploaded file to temporary location
+                    with tempfile.NamedTemporaryFile(
+                        delete=False, suffix=Path(audio_file.name).suffix
+                    ) as tmp:
+                        tmp.write(audio_file.getbuffer())
+                        audio_path = tmp.name
 
                 result = run_pipeline(
-                    text_input=text_val if mode == "Text" else None,
-                    audio_bytes=audio_bytes,
-                    audio_filename=audio_filename,
+                    input_text=text_val if mode == "Text" else None,
+                    audio_path=audio_path,
                     target_language=st.session_state.target_lang,
+                    story_format="News Bulletin",
                 )
-                st.session_state.results = result
-                st.session_state.error = None
+
+                # Check for errors in result
+                if result.get("error"):
+                    st.session_state.error = result["error"]
+                    st.session_state.results = None
+                else:
+                    st.session_state.results = result
+                    st.session_state.error = None
+
             except Exception as exc:
                 st.session_state.error = str(exc)
                 st.session_state.results = None
@@ -629,7 +641,7 @@ with right:
     # ── Results ──
     else:
         r = st.session_state.results
-        lang = LANGUAGE_NAMES.get(st.session_state.target_lang, "Local Language")
+        lang = st.session_state.target_lang
 
         def rcard(icon_html, icon_cls, title, sub, body, serif=False):
             body_cls = "rcard-body serif" if serif else "rcard-body"
@@ -648,20 +660,18 @@ with right:
                 unsafe_allow_html=True,
             )
 
-        # Transcript (audio mode)
+        # Transcript (audio mode) with detected language
         if r.get("transcript"):
+            detected_lang_text = (
+                f" ({r['detected_language']})" if r.get("detected_language") else ""
+            )
             rcard(
                 SVG_MIC,
                 "ic-blue",
                 "Transcript",
-                "Audio converted to text via Sunbird STT",
+                f"Audio converted to text via Sunbird STT{detected_lang_text}",
                 r["transcript"],
             )
-
-        # Source text (text mode)
-        if not r.get("transcript") and r.get("source_text"):
-            body = r["source_text"][:900] + ("…" if len(r["source_text"]) > 900 else "")
-            rcard(SVG_DOC, "ic-blue", "Source Text", "Your original input", body)
 
         # Summary
         if r.get("summary"):
