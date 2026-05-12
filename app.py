@@ -1,5 +1,5 @@
 """
-Sauti — Your Local Language Broadcast Bridge
+Eddoboozi — Your Local Language Broadcast Bridge
 Powered by Sunbird AI
 """
 
@@ -14,14 +14,15 @@ from backend.pipeline import run_pipeline
 
 # ── Page config ────────────────────────────────────────────────────────────────
 st.set_page_config(
-    page_title="Sauti — Language Bridge",
+    page_title="Eddoboozi — Language Bridge",
     page_icon="🎙️",
     layout="wide",
     initial_sidebar_state="collapsed",
 )
 
 # ── Custom CSS ─────────────────────────────────────────────────────────────────
-st.markdown("""
+st.markdown(
+    """
 <style>
 @import url('https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;0,9..40,600;1,9..40,300&display=swap');
 
@@ -81,7 +82,7 @@ footer, #MainMenu                 { display: none !important; }
 /* ═══════════════════════════════════════════
    HERO HEADER
 ═══════════════════════════════════════════ */
-.sauti-hero {
+.Eddoboozi-hero {
   padding: 1.75rem 2.5rem 1.5rem;
   border-bottom: 1px solid var(--border);
   display: flex;
@@ -389,45 +390,73 @@ audio {
 .hint { font-size: .75rem; color: var(--muted); margin-top: .3rem; line-height: 1.5; }
 
 </style>
-""", unsafe_allow_html=True)
+""",
+    unsafe_allow_html=True,
+)
 
 
 # ── Session state ──────────────────────────────────────────────────────────────
-for k, v in [("results", None), ("error", None), ("processing", False),
-              ("input_mode", "Text"), ("target_lang", "lug")]:
+for k, v in [
+    ("results", None),
+    ("error", None),
+    ("processing", False),
+    ("input_mode", "Text"),
+    ("target_lang", "lug"),
+]:
     if k not in st.session_state:
         st.session_state[k] = v
 
 
 # ── SVG icon helpers (clean, no emoji) ────────────────────────────────────────
 def _svg(path_d, viewbox="0 0 24 24", fill="none", stroke="currentColor", extra=""):
-    return (f'<svg viewBox="{viewbox}" fill="{fill}" stroke="{stroke}" stroke-width="2" '
-            f'stroke-linecap="round" stroke-linejoin="round" {extra}>{path_d}</svg>')
+    return (
+        f'<svg viewBox="{viewbox}" fill="{fill}" stroke="{stroke}" stroke-width="2" '
+        f'stroke-linecap="round" stroke-linejoin="round" {extra}>{path_d}</svg>'
+    )
 
-SVG_MIC    = _svg('<path d="M12 2a3 3 0 0 1 3 3v7a3 3 0 0 1-6 0V5a3 3 0 0 1 3-3z"/>'
-                  '<path d="M19 10v2a7 7 0 0 1-14 0v-2"/><line x1="12" y1="19" x2="12" y2="22"/>')
-SVG_DOC    = _svg('<path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/>'
-                  '<polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/>'
-                  '<line x1="16" y1="17" x2="8" y2="17"/>')
-SVG_STAR   = _svg('<path d="M12 2l2.4 7.4H22l-6.2 4.5 2.4 7.4L12 17l-6.2 4.3 2.4-7.4L2 9.4h7.6z"/>',
-                  fill="currentColor", stroke="none")
-SVG_GLOBE  = _svg('<circle cx="12" cy="12" r="10"/><line x1="2" y1="12" x2="22" y2="12"/>'
-                  '<path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/>')
-SVG_PLAY   = _svg('<polygon points="5 3 19 12 5 21 5 3"/>', fill="currentColor", stroke="none")
-SVG_ALERT  = _svg('<circle cx="12" cy="12" r="10"/>'
-                  '<line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/>')
-SVG_RADIO  = _svg('<path d="M3 18v-6a9 9 0 0 1 18 0v6"/>'
-                  '<path d="M21 19a2 2 0 0 1-2 2h-1a2 2 0 0 1-2-2v-3a2 2 0 0 1 2-2h3z"/>'
-                  '<path d="M3 19a2 2 0 0 0 2 2h1a2 2 0 0 0 2-2v-3a2 2 0 0 0-2-2H3z"/>')
-SVG_UPLOAD = _svg('<polyline points="16 16 12 12 8 16"/><line x1="12" y1="12" x2="12" y2="21"/>'
-                  '<path d="M20.39 18.39A5 5 0 0 0 18 9h-1.26A8 8 0 1 0 3 16.3"/>')
+
+SVG_MIC = _svg(
+    '<path d="M12 2a3 3 0 0 1 3 3v7a3 3 0 0 1-6 0V5a3 3 0 0 1 3-3z"/>'
+    '<path d="M19 10v2a7 7 0 0 1-14 0v-2"/><line x1="12" y1="19" x2="12" y2="22"/>'
+)
+SVG_DOC = _svg(
+    '<path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/>'
+    '<polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/>'
+    '<line x1="16" y1="17" x2="8" y2="17"/>'
+)
+SVG_STAR = _svg(
+    '<path d="M12 2l2.4 7.4H22l-6.2 4.5 2.4 7.4L12 17l-6.2 4.3 2.4-7.4L2 9.4h7.6z"/>',
+    fill="currentColor",
+    stroke="none",
+)
+SVG_GLOBE = _svg(
+    '<circle cx="12" cy="12" r="10"/><line x1="2" y1="12" x2="22" y2="12"/>'
+    '<path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/>'
+)
+SVG_PLAY = _svg(
+    '<polygon points="5 3 19 12 5 21 5 3"/>', fill="currentColor", stroke="none"
+)
+SVG_ALERT = _svg(
+    '<circle cx="12" cy="12" r="10"/>'
+    '<line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/>'
+)
+SVG_RADIO = _svg(
+    '<path d="M3 18v-6a9 9 0 0 1 18 0v6"/>'
+    '<path d="M21 19a2 2 0 0 1-2 2h-1a2 2 0 0 1-2-2v-3a2 2 0 0 1 2-2h3z"/>'
+    '<path d="M3 19a2 2 0 0 0 2 2h1a2 2 0 0 0 2-2v-3a2 2 0 0 0-2-2H3z"/>'
+)
+SVG_UPLOAD = _svg(
+    '<polyline points="16 16 12 12 8 16"/><line x1="12" y1="12" x2="12" y2="21"/>'
+    '<path d="M20.39 18.39A5 5 0 0 0 18 9h-1.26A8 8 0 1 0 3 16.3"/>'
+)
 
 
 # ═══════════════════════════════════════════════════════════════════════════════
 # HERO
 # ═══════════════════════════════════════════════════════════════════════════════
-st.markdown(f"""
-<div class="sauti-hero">
+st.markdown(
+    f"""
+<div class="Eddoboozi-hero">
   <div class="logo-mark">
     <svg viewBox="0 0 26 26" fill="none" xmlns="http://www.w3.org/2000/svg">
       <ellipse cx="13" cy="11" rx="7" ry="8" fill="#0d1117" opacity=".8"/>
@@ -438,11 +467,13 @@ st.markdown(f"""
     </svg>
   </div>
   <div class="hero-text">
-    <h1>Sauti</h1>
+    <h1>Eddoboozi</h1>
     <p>Your Language Bridge &mdash; Transcribe, Summarise &amp; Broadcast in Ugandan Languages</p>
   </div>
 </div>
-""", unsafe_allow_html=True)
+""",
+    unsafe_allow_html=True,
+)
 
 
 # ═══════════════════════════════════════════════════════════════════════════════
@@ -461,9 +492,12 @@ else:
 STEPS = ["Input", "Transcribe", "Summarise", "Translate", "Synthesise", "Output"]
 html = '<div class="pip-strip">'
 for i, (label, state) in enumerate(zip(STEPS, states)):
-    dot = ('<svg viewBox="0 0 10 10" fill="currentColor" width="8" height="8">'
-           '<circle cx="5" cy="5" r="4"/></svg>' if state == "done"
-           else '<div class="ps-dot"></div>')
+    dot = (
+        '<svg viewBox="0 0 10 10" fill="currentColor" width="8" height="8">'
+        '<circle cx="5" cy="5" r="4"/></svg>'
+        if state == "done"
+        else '<div class="ps-dot"></div>'
+    )
     html += f'<div class="ps {state}">{dot} {label}</div>'
     if i < len(STEPS) - 1:
         html += '<span class="ps-arr">›</span>'
@@ -498,7 +532,10 @@ with left:
     audio_file = None
 
     if mode == "Text":
-        st.markdown('<div class="sec-label">Paste or type your content</div>', unsafe_allow_html=True)
+        st.markdown(
+            '<div class="sec-label">Paste or type your content</div>',
+            unsafe_allow_html=True,
+        )
         text_val = st.text_area(
             "txt",
             placeholder="Paste a news article, announcement, report or any English text here…",
@@ -510,8 +547,10 @@ with left:
             f'<div class="sec-label">{SVG_UPLOAD} Upload Audio File</div>',
             unsafe_allow_html=True,
         )
-        st.markdown('<p class="hint">Supported: MP3, WAV, OGG, M4A &nbsp;·&nbsp; Max 5 minutes</p>',
-                    unsafe_allow_html=True)
+        st.markdown(
+            '<p class="hint">Supported: MP3, WAV, OGG, M4A &nbsp;·&nbsp; Max 5 minutes</p>',
+            unsafe_allow_html=True,
+        )
         audio_file = st.file_uploader(
             "audio",
             type=["mp3", "wav", "ogg", "m4a", "aac"],
@@ -522,7 +561,13 @@ with left:
 
     # Language picker
     st.markdown('<div class="sec-label">Target Language</div>', unsafe_allow_html=True)
-    LANGS = {"lug": "Luganda", "nyn": "Runyankole", "teo": "Ateso", "lgg": "Lugbara", "ach": "Acholi"}
+    LANGS = {
+        "lug": "Luganda",
+        "nyn": "Runyankole",
+        "teo": "Ateso",
+        "lgg": "Lugbara",
+        "ach": "Acholi",
+    }
     lang_names = list(LANGS.values())
     lang_codes = list(LANGS.keys())
 
@@ -579,18 +624,22 @@ with right:
 
     # ── Error ──
     if st.session_state.error:
-        st.markdown(f"""
+        st.markdown(
+            f"""
         <div class="err-banner">
           {SVG_ALERT}
           <div>
             <div class="err-title">Something went wrong</div>
             <div class="err-msg">{st.session_state.error}</div>
           </div>
-        </div>""", unsafe_allow_html=True)
+        </div>""",
+            unsafe_allow_html=True,
+        )
 
     # ── Empty state ──
     elif not st.session_state.results:
-        st.markdown(f"""
+        st.markdown(
+            f"""
         <div class="empty-st">
           <div class="empty-icon">
             <svg viewBox="0 0 24 24" fill="none" stroke="#f0a500" stroke-width="1.5"
@@ -603,7 +652,9 @@ with right:
           <h3>Ready to broadcast</h3>
           <p>Enter text or upload an audio file on the left, choose a target language,
              then click <em>Broadcast</em> to run the full pipeline.</p>
-        </div>""", unsafe_allow_html=True)
+        </div>""",
+            unsafe_allow_html=True,
+        )
 
     # ── Results ──
     else:
@@ -612,7 +663,8 @@ with right:
 
         def rcard(icon_html, icon_cls, title, sub, body, serif=False):
             body_cls = "rcard-body serif" if serif else "rcard-body"
-            st.markdown(f"""
+            st.markdown(
+                f"""
             <div class="rcard">
               <div class="rcard-head">
                 <div class="rcard-icon {icon_cls}">{icon_html}</div>
@@ -622,35 +674,51 @@ with right:
                 </div>
               </div>
               <div class="{body_cls}">{body}</div>
-            </div>""", unsafe_allow_html=True)
+            </div>""",
+                unsafe_allow_html=True,
+            )
 
         # Transcript (audio mode)
         if r.get("transcript"):
-            rcard(SVG_MIC, "ic-blue", "Transcript",
-                  "Audio converted to text via Sunbird STT",
-                  r["transcript"])
+            rcard(
+                SVG_MIC,
+                "ic-blue",
+                "Transcript",
+                "Audio converted to text via Sunbird STT",
+                r["transcript"],
+            )
 
         # Source text (text mode)
         if not r.get("transcript") and r.get("source_text"):
             body = r["source_text"][:900] + ("…" if len(r["source_text"]) > 900 else "")
-            rcard(SVG_DOC, "ic-blue", "Source Text",
-                  "Your original input", body)
+            rcard(SVG_DOC, "ic-blue", "Source Text", "Your original input", body)
 
         # Summary
         if r.get("summary"):
-            rcard(SVG_STAR, "ic-amber", "Summary",
-                  "Condensed by Sunbird Summarisation · PII anonymised",
-                  r["summary"], serif=True)
+            rcard(
+                SVG_STAR,
+                "ic-amber",
+                "Summary",
+                "Condensed by Sunbird Summarisation · PII anonymised",
+                r["summary"],
+                serif=True,
+            )
 
         # Translation
         if r.get("translation"):
-            rcard(SVG_GLOBE, "ic-purple", f"Translated to {lang}",
-                  "Powered by Sunflower LLM",
-                  r["translation"], serif=True)
+            rcard(
+                SVG_GLOBE,
+                "ic-purple",
+                f"Translated to {lang}",
+                "Powered by Sunflower LLM",
+                r["translation"],
+                serif=True,
+            )
 
         # Audio player card
         if r.get("audio_url"):
-            st.markdown(f"""
+            st.markdown(
+                f"""
             <div class="rcard">
               <div class="rcard-head">
                 <div class="rcard-icon ic-green">{SVG_PLAY}</div>
@@ -659,5 +727,7 @@ with right:
                   <div class="rcard-sub">Generated by Sunbird TTS — play or download</div>
                 </div>
               </div>
-            </div>""", unsafe_allow_html=True)
+            </div>""",
+                unsafe_allow_html=True,
+            )
             st.audio(r["audio_url"])
